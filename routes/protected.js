@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../middleware/verifytoken');
-const authorizeRole = require('../middleware/authorizerole');
+const verifyToken = require('../middleware/verifyToken');
+const authorizeRole = require('../middleware/authorizeRole');
 const fs = require('fs');
 const path = require('path');
 const auditFile = path.join(__dirname, '..', 'audit.log');
