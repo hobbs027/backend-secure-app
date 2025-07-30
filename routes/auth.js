@@ -24,10 +24,11 @@ router.post('/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert new user
-    const [result] = await db.execute(
+    const result = await db.execute(
       'INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)',
       [username, email, hashedPassword, role]
     );
+    console.log("DB result:", result);
 
     console.log("User inserted with ID:", result.insertId);
 
