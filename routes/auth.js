@@ -6,13 +6,21 @@ const jwt = require('jsonwebtoken');
 const verifyToken = require('../middleware/verifyToken');
 const authorizeRole = require('../middleware/authorizeRole');
 
+const VALID_ROLES = ['admin', 'viewer', 'editor']; 
+
 // Signup Route
 router.post('/signup', async (req, res, next) => {
   const { username, email, password, role } = req.body;
+  console.log('Signup route hit');
+  console.log('Incoming payload:', req.body);
 
   try {
     if (!username || !email || !password || !role) {
       return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    if (!VALID_ROLES.includes(role)) {
+      return res.status(400).json({ message: 'Invalid role specified' });
     }
 
     const [existing] = await db.execute('SELECT id FROM users WHERE email = ?', [email]);
@@ -31,8 +39,10 @@ router.post('/signup', async (req, res, next) => {
       expiresIn: '1h',
     });
 
-    res.status(201).json({ message: 'User registered successfully', token });
+    console.log('Signup success:', { userId, email, role });
+    res.status(201).json({ email, token }); // frontend expects email and token
   } catch (err) {
+    console.error('Signup error:', err.message);
     next(err);
   }
 });
