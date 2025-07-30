@@ -1,46 +1,41 @@
-//  Load environment variables
 require('dotenv').config();
 
-//  Core modules
 const express = require('express');
 const path = require('path');
-
-//  Security and Middleware
 const helmet = require('helmet');
 const cors = require('cors');
 
-//  Initialize app
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-//  Middleware
+// Security & Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://doc-secure-frontend.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
-  credentials: true
+  credentials: true,
 }));
 
-//  CORS preflight handler
 app.options('*', cors());
 
-//  Global Request Logger
+// Request Logger
 app.use((req, res, next) => {
   console.log(` ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// API Routes
+//  Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/protected', require('./routes/protected'));
 
-//  Serve frontend static assets
+// Static frontend assets (if used locally or packaged)
 app.use(express.static(path.join(__dirname, 'public')));
 
-//  SPA Fallback for client routing
+// SPA Fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
