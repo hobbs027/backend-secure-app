@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 
 app.use(cors({
-  origin: ['http://localhost:5173','https://doc-secure-frontend.vercel.app'],
+  origin: 'https://doc-secure-frontend.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
