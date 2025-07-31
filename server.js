@@ -24,7 +24,7 @@ app.options('*', cors());
 
 // Request Logger
 app.use((req, res, next) => {
-  console.log(` ${req.method} ${req.originalUrl}`);
+  console.log(`Incoming request:`, req.method, req.originalUrl);
   next();
 });
 
